@@ -1,4 +1,4 @@
-import { createPoll } from "../services/pollServices.js";
+import { createPoll, vote } from "../services/pollServices.js";
 import httpStatus from 'http-status';
 
 const newPoll = async (req, res, next) =>{
@@ -21,6 +21,22 @@ const newPoll = async (req, res, next) =>{
     }
 };
 
+const pallot = async (req, res, next) => {
+
+    if (!req.body)
+        return res.status(httpStatus.BAD_REQUEST)
+            .json({error:true, message:"Pallot needed"});
+    const {
+        poll,
+        option
+    } = req.body;
+
+    const result = await vote(poll, option);
+
+    return res.status(httpStatus.OK).json({error:false, vote:"successs"});
+};
+
 export {
-    newPoll
+    newPoll,
+    pallot
 };

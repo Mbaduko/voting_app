@@ -19,6 +19,23 @@ const createPoll = async (creator, question, options) => {
     return await poll.save();
 };
 
+const vote = async (poll, option) => {
+    const result = await Poll.updateOne(
+        {
+            _id:poll,
+            "options.option":option
+        },
+        {
+            $inc:{
+                "options.$.vote":1
+            }
+        }
+    );
+
+    return !! result.modifiedCount;
+};
+
 export {
-    createPoll
+    createPoll,
+    vote
 };
